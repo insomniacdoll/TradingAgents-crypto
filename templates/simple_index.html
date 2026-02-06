@@ -183,6 +183,9 @@
                         <select class="form-select" id="llm_provider" name="llm_provider">
                             <option value="openai">OpenAI</option>
                             <option value="anthropic">Anthropic</option>
+                            <option value="google">Google</option>
+                            <option value="aliyun">Aliyun (通义千问)</option>
+                            <option value="volcengine">Volcengine (火山引擎)</option>
                         </select>
                         <input type="text" class="form-control mt-2" id="backend_url" name="backend_url" 
                                value="https://api.openai.com/v1">
@@ -225,7 +228,112 @@
                 this.classList.toggle('selected');
             });
         });
-        
+
+        // Update backend URL based on provider selection
+        document.getElementById('llm_provider').addEventListener('change', function() {
+            const provider = this.value;
+            const urlInput = document.getElementById('backend_url');
+            const shallowSelect = document.getElementById('shallow_thinker');
+            const deepSelect = document.getElementById('deep_thinker');
+
+            const urls = {
+                'openai': 'https://api.openai.com/v1',
+                'anthropic': 'https://api.anthropic.com/',
+                'google': 'https://generativelanguage.googleapis.com/v1',
+                'aliyun': 'https://dashscope.aliyuncs.com/compatible-mode/v1',
+                'volcengine': 'https://ark.cn-beijing.volces.com/api/v3'
+            };
+            urlInput.value = urls[provider] || '';
+
+            const models = {
+                'openai': {
+                    shallow: [
+                        {value: 'gpt-4o-mini', text: 'GPT-4o-mini'},
+                        {value: 'gpt-4.1-nano', text: 'GPT-4.1-nano'},
+                        {value: 'gpt-4.1-mini', text: 'GPT-4.1-mini'},
+                        {value: 'gpt-4o', text: 'GPT-4o'}
+                    ],
+                    deep: [
+                        {value: 'gpt-4.1-nano', text: 'GPT-4.1-nano'},
+                        {value: 'gpt-4.1-mini', text: 'GPT-4.1-mini'},
+                        {value: 'gpt-4o', text: 'GPT-4o'},
+                        {value: 'o4-mini', text: 'o4-mini'},
+                        {value: 'o3-mini', text: 'o3-mini'},
+                        {value: 'o3', text: 'o3'},
+                        {value: 'o1', text: 'o1'}
+                    ]
+                },
+                'anthropic': {
+                    shallow: [
+                        {value: 'claude-3-5-haiku-latest', text: 'Claude Haiku 3.5'},
+                        {value: 'claude-3-5-sonnet-latest', text: 'Claude Sonnet 3.5'},
+                        {value: 'claude-3-7-sonnet-latest', text: 'Claude Sonnet 3.7'},
+                        {value: 'claude-sonnet-4-0', text: 'Claude Sonnet 4'}
+                    ],
+                    deep: [
+                        {value: 'claude-3-5-haiku-latest', text: 'Claude Haiku 3.5'},
+                        {value: 'claude-3-5-sonnet-latest', text: 'Claude Sonnet 3.5'},
+                        {value: 'claude-3-7-sonnet-latest', text: 'Claude Sonnet 3.7'},
+                        {value: 'claude-sonnet-4-0', text: 'Claude Sonnet 4'},
+                        {value: 'claude-opus-4-0', text: 'Claude Opus 4'}
+                    ]
+                },
+                'google': {
+                    shallow: [
+                        {value: 'gemini-2.0-flash-lite', text: 'Gemini 2.0 Flash-Lite'},
+                        {value: 'gemini-2.0-flash', text: 'Gemini 2.0 Flash'},
+                        {value: 'gemini-2.5-flash-preview-05-20', text: 'Gemini 2.5 Flash'}
+                    ],
+                    deep: [
+                        {value: 'gemini-2.0-flash-lite', text: 'Gemini 2.0 Flash-Lite'},
+                        {value: 'gemini-2.0-flash', text: 'Gemini 2.0 Flash'},
+                        {value: 'gemini-2.5-flash-preview-05-20', text: 'Gemini 2.5 Flash'},
+                        {value: 'gemini-2.5-pro-preview-06-05', text: 'Gemini 2.5 Pro'}
+                    ]
+                },
+                'aliyun': {
+                    shallow: [
+                        {value: 'qwen-turbo', text: 'Qwen Turbo'},
+                        {value: 'qwen-flash', text: 'Qwen Flash'},
+                        {value: 'qwen-plus', text: 'Qwen Plus'}
+                    ],
+                    deep: [
+                        {value: 'qwen-plus', text: 'Qwen Plus'},
+                        {value: 'qwen-max', text: 'Qwen Max'},
+                        {value: 'qwen3-max', text: 'Qwen3 Max'},
+                        {value: 'qwq-plus', text: 'QwQ Plus'},
+                        {value: 'qwen-long', text: 'Qwen Long'}
+                    ]
+                },
+                'volcengine': {
+                    shallow: [
+                        {value: 'ep-202xxxxxx', text: 'Doubao-lite-4k'},
+                        {value: 'ep-202xxxxxx', text: 'Doubao-lite-32k'}
+                    ],
+                    deep: [
+                        {value: 'ep-202xxxxxx', text: 'Doubao-pro-4k'},
+                        {value: 'ep-202xxxxxx', text: 'Doubao-pro-32k'},
+                        {value: 'ep-202xxxxxx', text: 'Doubao-pro-128k'}
+                    ]
+                }
+            };
+
+            if (models[provider]) {
+                updateSelectOptions(shallowSelect, models[provider].shallow);
+                updateSelectOptions(deepSelect, models[provider].deep);
+            }
+        });
+
+        function updateSelectOptions(select, options) {
+            select.innerHTML = '';
+            options.forEach(option => {
+                const optionElement = document.createElement('option');
+                optionElement.value = option.value;
+                optionElement.textContent = option.text;
+                select.appendChild(optionElement);
+            });
+        }
+
         // Handle form submission
         document.getElementById('analysisForm').addEventListener('submit', function(e) {
             e.preventDefault();

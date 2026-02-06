@@ -1,17 +1,28 @@
 import chromadb
 from chromadb.config import Settings
 from openai import OpenAI
+import os
 
 
 class FinancialSituationMemory:
     def __init__(self, name, config):
+        provider = config.get("llm_provider", "").lower()
         if config["backend_url"] == "http://localhost:11434/v1":
             self.embedding = "nomic-embed-text"
+        elif provider == "aliyun":
+            self.embedding = "text-embedding-v4"
         else:
             self.embedding = "text-embedding-3-small"
+        
+        # Get API key with fallback for aliyun provider
+        if provider == "aliyun":
+            api_key = config.get("api_key") or os.getenv("OPENAI_API_KEY")
+        else:
+            api_key = config.get("api_key")
+        
         self.client = OpenAI(
             base_url=config["backend_url"],
-            api_key=config["api_key"]
+            api_key=api_key
         )
         self.chroma_client = chromadb.Client(Settings(allow_reset=True))
         

@@ -144,6 +144,15 @@ def select_shallow_thinking_agent(provider) -> str:
             ("Gemini 2.0 Flash - Next generation features, speed, and thinking", "gemini-2.0-flash"),
             ("Gemini 2.5 Flash - Adaptive thinking, cost efficiency", "gemini-2.5-flash-preview-05-20"),
         ],
+        "aliyun": [
+            ("Qwen Turbo - Fast and efficient for quick tasks", "qwen-turbo"),
+            ("Qwen Flash - Ultra-fast response speed", "qwen-flash"),
+            ("Qwen Plus - Balanced performance", "qwen-plus"),
+        ],
+        "volcengine": [
+            ("Doubao-lite-4k - Ultra-fast response speed", "ep-202xxxxxx"),  # Replace with your endpoint ID
+            ("Doubao-lite-32k - Fast response with 32k context", "ep-202xxxxxx"),  # Replace with your endpoint ID
+        ],
         "openrouter": [
             ("Meta: Llama 4 Scout", "meta-llama/llama-4-scout:free"),
             ("Meta: Llama 3.3 8B Instruct - A lightweight and ultra-fast variant of Llama 3.3 70B", "meta-llama/llama-3.3-8b-instruct:free"),
@@ -207,6 +216,18 @@ def select_deep_thinking_agent(provider) -> str:
             ("Gemini 2.5 Flash - Adaptive thinking, cost efficiency", "gemini-2.5-flash-preview-05-20"),
             ("Gemini 2.5 Pro", "gemini-2.5-pro-preview-06-05"),
         ],
+        "aliyun": [
+            ("Qwen Plus - Balanced performance", "qwen-plus"),
+            ("Qwen Max - Most powerful commercial model", "qwen-max"),
+            ("Qwen3 Max - Latest generation Max model", "qwen3-max"),
+            ("QwQ Plus - Strong reasoning capabilities", "qwq-plus"),
+            ("Qwen Long - Extended context window (1M tokens)", "qwen-long"),
+        ],
+        "volcengine": [
+            ("Doubao-pro-4k - Best performance model with 4k context", "ep-202xxxxxx"),  # Replace with your endpoint ID
+            ("Doubao-pro-32k - Best performance model with 32k context", "ep-202xxxxxx"),  # Replace with your endpoint ID
+            ("Doubao-pro-128k - Best performance model with 128k context", "ep-202xxxxxx"),  # Replace with your endpoint ID
+        ],
         "openrouter": [
             ("DeepSeek V3 - a 685B-parameter, mixture-of-experts model", "deepseek/deepseek-chat-v3-0324:free"),
             ("Deepseek - latest iteration of the flagship chat model family from the DeepSeek team.", "deepseek/deepseek-chat-v3-0324:free"),
@@ -246,8 +267,10 @@ def select_llm_provider() -> tuple[str, str]:
         ("OpenAI", "https://api.openai.com/v1"),
         ("Anthropic", "https://api.anthropic.com/"),
         ("Google", "https://generativelanguage.googleapis.com/v1"),
+        ("Aliyun", "https://dashscope.aliyuncs.com/compatible-mode/v1"),
+        ("Volcengine", "https://ark.cn-beijing.volces.com/api/v3"),
         ("Openrouter", "https://openrouter.ai/api/v1"),
-        ("Ollama", "http://localhost:11434/v1"),        
+        ("Ollama", "http://localhost:11434/v1"),
     ]
     
     choice = questionary.select(

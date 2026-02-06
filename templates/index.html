@@ -543,6 +543,8 @@
                                 <option value="openai">OpenAI</option>
                                 <option value="anthropic">Anthropic</option>
                                 <option value="google">Google</option>
+                                <option value="aliyun">Aliyun (通义千问)</option>
+                                <option value="volcengine">Volcengine (火山引擎)</option>
                             </select>
                             <input type="text" class="form-control" id="backend_url" name="backend_url" 
                                    placeholder="Backend URL" value="https://api.openai.com/v1" style="margin-top: 12px;">
@@ -752,7 +754,9 @@
             const urls = {
                 'openai': 'https://api.openai.com/v1',
                 'anthropic': 'https://api.anthropic.com/',
-                'google': 'https://generativelanguage.googleapis.com/v1'
+                'google': 'https://generativelanguage.googleapis.com/v1',
+                'aliyun': 'https://dashscope.aliyuncs.com/compatible-mode/v1',
+                'volcengine': 'https://ark.cn-beijing.volces.com/api/v3'
             };
             urlInput.value = urls[provider] || '';
             
@@ -801,6 +805,31 @@
                         {value: 'gemini-2.0-flash', text: 'Gemini 2.0 Flash - Next generation features, speed, and thinking'},
                         {value: 'gemini-2.5-flash-preview-05-20', text: 'Gemini 2.5 Flash - Adaptive thinking, cost efficiency'},
                         {value: 'gemini-2.5-pro-preview-06-05', text: 'Gemini 2.5 Pro'}
+                    ]
+                },
+                'aliyun': {
+                    shallow: [
+                        {value: 'qwen-turbo', text: 'Qwen Turbo - Fast and efficient for quick tasks'},
+                        {value: 'qwen-flash', text: 'Qwen Flash - Ultra-fast response speed'},
+                        {value: 'qwen-plus', text: 'Qwen Plus - Balanced performance'}
+                    ],
+                    deep: [
+                        {value: 'qwen-plus', text: 'Qwen Plus - Balanced performance'},
+                        {value: 'qwen-max', text: 'Qwen Max - Most powerful commercial model'},
+                        {value: 'qwen3-max', text: 'Qwen3 Max - Latest generation Max model'},
+                        {value: 'qwq-plus', text: 'QwQ Plus - Strong reasoning capabilities'},
+                        {value: 'qwen-long', text: 'Qwen Long - Extended context window (1M tokens)'}
+                    ]
+                },
+                'volcengine': {
+                    shallow: [
+                        {value: 'ep-202xxxxxx', text: 'Doubao-lite-4k - Ultra-fast response speed (Replace ep-202xxxxxx with your endpoint ID)'},
+                        {value: 'ep-202xxxxxx', text: 'Doubao-lite-32k - Fast response with 32k context (Replace ep-202xxxxxx with your endpoint ID)'}
+                    ],
+                    deep: [
+                        {value: 'ep-202xxxxxx', text: 'Doubao-pro-4k - Best performance model with 4k context (Replace ep-202xxxxxx with your endpoint ID)'},
+                        {value: 'ep-202xxxxxx', text: 'Doubao-pro-32k - Best performance model with 32k context (Replace ep-202xxxxxx with your endpoint ID)'},
+                        {value: 'ep-202xxxxxx', text: 'Doubao-pro-128k - Best performance model with 128k context (Replace ep-202xxxxxx with your endpoint ID)'}
                     ]
                 }
             };
