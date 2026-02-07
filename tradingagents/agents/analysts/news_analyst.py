@@ -1,6 +1,7 @@
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 import time
 import json
+from ..utils.prompt_templates import get_prompt_template
 
 
 def _is_crypto_symbol(symbol: str) -> bool:
@@ -60,14 +61,7 @@ def create_news_analyst(llm, toolkit):
         if is_crypto:
             # Use crypto-specific tools
             tools = [toolkit.get_crypto_news_analysis, toolkit.get_google_news]
-            
-            system_message = (
-                "You are a cryptocurrency news researcher tasked with analyzing recent news and trends over the past week that affect cryptocurrency markets. Please write a comprehensive report of the current state of the crypto world and broader macroeconomic factors that are relevant for cryptocurrency trading. "
-                "Focus on crypto-specific news including: regulatory developments, institutional adoption, technology updates, market sentiment, DeFi trends, NFT markets, blockchain developments, and major crypto exchange news. "
-                "Also consider traditional macroeconomic factors that impact crypto markets such as inflation, monetary policy, global economic uncertainty, and traditional market trends. "
-                "Do not simply state the trends are mixed, provide detailed and fine-grained analysis and insights that may help crypto traders make decisions."
-                + """ Make sure to append a Markdown table at the end of the report to organize key points in the report, organized and easy to read."""
-            )
+            system_message = get_prompt_template(toolkit.config["language"], "news_analyst_crypto")
         else:
             # Use stock-specific tools (original functionality)
             if toolkit.config["online_tools"] and toolkit.config.get("support_openai_web_search", False):
@@ -78,24 +72,13 @@ def create_news_analyst(llm, toolkit):
                     toolkit.get_reddit_news,
                     toolkit.get_google_news,
                 ]
-
-            system_message = (
-                "You are a news researcher tasked with analyzing recent news and trends over the past week. Please write a comprehensive report of the current state of the world that is relevant for trading and macroeconomics. Look at news from EODHD, and finnhub to be comprehensive. Do not simply state the trends are mixed, provide detailed and finegrained analysis and insights that may help traders make decisions."
-                + """ Make sure to append a Markdown table at the end of the report to organize key points in the report, organized and easy to read."""
-            )
+            system_message = get_prompt_template(toolkit.config["language"], "news_analyst_stock")
 
         prompt = ChatPromptTemplate.from_messages(
             [
                 (
                     "system",
-                    "You are a helpful AI assistant, collaborating with other assistants."
-                    " Use the provided tools to progress towards answering the question."
-                    " If you are unable to fully answer, that's OK; another assistant with different tools"
-                    " will help where you left off. Execute what you can to make progress."
-                    " If you or any other assistant has the FINAL TRANSACTION PROPOSAL: **BUY/HOLD/SELL** or deliverable,"
-                    " prefix your response with FINAL TRANSACTION PROPOSAL: **BUY/HOLD/SELL** so the team knows to stop."
-                    " You have access to the following tools: {tool_names}.\n{system_message}"
-                    "For your reference, the current date is {current_date}. We are looking at the company {ticker}",
+                    get_prompt_template(toolkit.config["language"], "common_system"),
                 ),
                 MessagesPlaceholder(variable_name="messages"),
             ]

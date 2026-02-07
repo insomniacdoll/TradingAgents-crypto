@@ -11,9 +11,10 @@ from tradingagents.agents.utils.agent_states import (
 class Propagator:
     """Handles state initialization and propagation through the graph."""
 
-    def __init__(self, max_recur_limit=100):
+    def __init__(self, max_recur_limit=100, language="en"):
         """Initialize with configuration parameters."""
         self.max_recur_limit = max_recur_limit
+        self.language = language
 
     def create_initial_state(
         self, company_name: str, trade_date: str
@@ -23,6 +24,7 @@ class Propagator:
             "messages": [("human", company_name)],
             "company_of_interest": company_name,
             "trade_date": str(trade_date),
+            "language": self.language,
             "investment_debate_state": InvestDebateState(
                 {"history": "", "current_response": "", "count": 0}
             ),

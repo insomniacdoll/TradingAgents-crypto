@@ -153,7 +153,10 @@ class TradingAgentsGraph:
             self.conditional_logic,
         )
 
-        self.propagator = Propagator()
+        self.propagator = Propagator(
+            max_recur_limit=self.config["max_recur_limit"],
+            language=self.config.get("language", "en")
+        )
         self.reflector = Reflector(self.quick_thinking_llm)
         self.signal_processor = SignalProcessor(self.quick_thinking_llm)
 

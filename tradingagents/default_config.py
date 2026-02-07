@@ -20,4 +20,6 @@ DEFAULT_CONFIG = {
     # Tool settings
     "online_tools": True,
     "support_openai_web_search": True,
+    # Language settings: "en" for English, "zh" for Chinese
+    "language": "zh",
 }
