@@ -9,7 +9,7 @@ def create_social_media_analyst(llm, toolkit):
         ticker = state["company_of_interest"]
         company_name = state["company_of_interest"]
 
-        if toolkit.config["online_tools"]:
+        if toolkit.config["online_tools"] and toolkit.config.get("support_openai_web_search", False):
             tools = [toolkit.get_stock_news_openai]
         else:
             tools = [

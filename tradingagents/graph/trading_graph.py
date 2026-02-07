@@ -56,6 +56,10 @@ class TradingAgentsGraph:
             os.path.join(self.config["project_dir"], "dataflows/data_cache"),
             exist_ok=True,
         )
+        # Create reddit_data subdirectories
+        reddit_data_dir = os.path.join(self.config["data_dir"], "reddit_data")
+        os.makedirs(os.path.join(reddit_data_dir, "global_news"), exist_ok=True)
+        os.makedirs(os.path.join(reddit_data_dir, "company_news"), exist_ok=True)
 
         # Initialize LLMs
         if self.config["llm_provider"].lower() == "openai" or self.config["llm_provider"] == "ollama" or self.config["llm_provider"] == "openrouter":
@@ -115,7 +119,13 @@ class TradingAgentsGraph:
             )
         else:
             raise ValueError(f"Unsupported LLM provider: {self.config['llm_provider']}")
-        
+
+        # Set support_openai_web_search flag based on provider
+        # Only OpenAI supports the Responses API with web_search_preview
+        providers_with_web_search = ['openai']
+        if self.config["llm_provider"].lower() not in providers_with_web_search:
+            self.config["support_openai_web_search"] = False
+
         self.toolkit = Toolkit(config=self.config)
 
         # Initialize memories

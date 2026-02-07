@@ -65,16 +65,21 @@ def fetch_top_from_category(
 
     all_content = []
 
-    if max_limit < len(os.listdir(os.path.join(base_path, category))):
+    # Get all .jsonl files in the category directory
+    jsonl_files = [f for f in os.listdir(os.path.join(base_path, category)) if f.endswith(".jsonl")]
+
+    # Return empty if no data files exist
+    if len(jsonl_files) == 0:
+        return all_content
+
+    if max_limit < len(jsonl_files):
         raise ValueError(
             "REDDIT FETCHING ERROR: max limit is less than the number of files in the category. Will not be able to fetch any posts"
         )
 
-    limit_per_subreddit = max_limit // len(
-        os.listdir(os.path.join(base_path, category))
-    )
+    limit_per_subreddit = max_limit // len(jsonl_files)
 
-    for data_file in os.listdir(os.path.join(base_path, category)):
+    for data_file in jsonl_files:
         # check if data_file is a .jsonl file
         if not data_file.endswith(".jsonl"):
             continue

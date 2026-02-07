@@ -70,7 +70,7 @@ def create_news_analyst(llm, toolkit):
             )
         else:
             # Use stock-specific tools (original functionality)
-            if toolkit.config["online_tools"]:
+            if toolkit.config["online_tools"] and toolkit.config.get("support_openai_web_search", False):
                 tools = [toolkit.get_global_news_openai, toolkit.get_google_news]
             else:
                 tools = [
